@@ -1,0 +1,18 @@
+---
+import { storyblokEditable } from "@storyblok/astro";
+
+import Feature from "./Feature.astro";
+
+const { blok } = Astro.props;
+// const content = renderRichText(blok.content)
+---
+
+<section class="py-20" {...storyblokEditable(blok)}>
+  <div class="container grid grid-cols-3 gap-4">
+    {
+      blok.columns?.map((blok: any) => {
+        return <Feature blok={blok} />;
+      })
+    }
+  </div>
+</section>

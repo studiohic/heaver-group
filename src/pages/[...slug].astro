@@ -1,0 +1,53 @@
+---
+import { useStoryblokApi } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { AstroSeo } from "@astrolib/seo";
+import { is_empty } from "svelte/internal";
+
+export async function getStaticPaths() {
+  const storyblokApi = useStoryblokApi();
+
+  const { data } = await storyblokApi.get("cdn/links", {
+    version: "draft",
+  });
+  let links = data.links;
+  links = Object.values(links);
+  links = links.filter(
+    (link: any) => link.slug !== "config" && links.slug !== "home"
+  );
+
+  return links.map((link: any) => {
+    return {
+      params: { slug: link.slug },
+    };
+  });
+}
+
+const { slug } = Astro.params;
+
+const storyblokApi = useStoryblokApi();
+
+const { data } = await storyblokApi.get(`cdn/stories/${slug}`, {
+  version: import.meta.env.DEV ? "draft" : "published",
+});
+
+const story = data.story;
+
+const seo = {
+  description: "",
+};
+
+if (story.content.meta) {
+  seo.description = story.content.meta.description;
+}
+if (story.content.meta.description == "") {
+  seo.description = "This is some dummy text";
+}
+---
+
+<!-- 
+<AstroSeo description={story.content.meta.description} /> -->
+<BaseLayout title={story.name} description={seo.description}>
+  <StoryblokComponent blok={story.content} />
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+import { storyblokEditable, renderRichText } from "@storyblok/astro";
+import StoryblokComponent from "@storyblok/astro/StoryblokComponent.astro";
+
+const { blok } = Astro.props;
+const content = renderRichText(blok.content);
+---
+
+<header class="container flex gap-4 p-8" {...storyblokEditable(blok)}>
+  <img width="60" height="88" src={blok.logo?.filename} alt={blok.logo?.alt} />
+  {
+    blok.header?.map((blok: any) => {
+      return <StoryblokComponent blok={blok} />;
+    })
+  }
+</header>

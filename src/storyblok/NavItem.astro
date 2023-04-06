@@ -1,0 +1,25 @@
+---
+import { storyblokEditable } from "@storyblok/astro";
+import NavSubItem from "./NavSubItem.astro";
+const { blok } = Astro.props;
+---
+
+{
+  () => {
+    const subMenu = blok.sub_menu;
+    if (subMenu) {
+      return (
+        <li class="has-children text-gray-700" {...storyblokEditable(blok)}>
+          <a href={blok.link.cached_url}>{blok.label}</a>
+          <NavSubItem blok={blok} />
+        </li>
+      );
+    } else {
+      return (
+        <li class="text-gray-700" {...storyblokEditable(blok)}>
+          <a href={blok.link.cached_url}>{blok.label}</a>
+        </li>
+      );
+    }
+  }
+}

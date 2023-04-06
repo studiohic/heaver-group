@@ -1,0 +1,17 @@
+---
+import { storyblokEditable } from "@storyblok/astro";
+
+const { blok } = Astro.props;
+---
+
+<ul class="sub-menu">
+  {
+    blok.sub_menu?.map((blok: any) => {
+      return (
+        <li class="text-blue-500" {...storyblokEditable(blok)}>
+          <a href={blok.link.cached_url}>{blok.label}</a>
+        </li>
+      );
+    })
+  }
+</ul>
